@@ -1,6 +1,7 @@
 "use client"
 import React from 'react'
 import { useLeads } from '../../../hooks/lead.hook'
+import Createlead from '../components/Createlead'
 
 const page = () => {
 
@@ -10,6 +11,7 @@ const page = () => {
     if (error) return <p>{error}</p>;
     return (
         <div>
+            <Createlead/>
             <div className="overflow-x-auto">
                 <table className="min-w-full border border-gray-300">
                     <thead className="bg-gray-100">

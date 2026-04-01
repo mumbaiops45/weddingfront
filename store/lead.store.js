@@ -1,5 +1,7 @@
 import { create } from "zustand";
-import { fetchLeadsService  , fetchsingleLeadsService} from "../service/lead.service";
+import { fetchLeadsService  , fetchsingleLeadsService , createLeadService } from "../service/lead.service";
+
+
 
 export const useLeadsStore = create((set) => ({
     leads: [],
@@ -20,6 +22,28 @@ export const useLeadsStore = create((set) => ({
      addLead: (lead) => set((state) => ({ leads: [lead, ...state.leads] })),
 }));
 
+export const useCreateLeadStore = create((set) => ({
+    loading: false,
+    error: null,
+    success: false,
+
+    createLead: async (leadData) => {
+        set({loading: true, error: null, success: false});
+
+        try {
+            const newLead = await createLeadService(leadData);
+            set({loading: false, success: true});
+            return newLead;
+        } catch (error) {
+            set({
+                error: error.response?.data?.message || "Failed to create lead",
+                loading: false,
+                success: false,
+            });
+        }
+    },
+}))
+
 
 export const usesingleLeadsStore = create((set) => ({
     leads: [],
@@ -39,3 +63,5 @@ export const usesingleLeadsStore = create((set) => ({
 
      addLead: (lead) => set((state) => ({ leads: [lead, ...state.leads] })),
 }));
+
+
