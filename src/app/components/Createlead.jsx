@@ -69,13 +69,12 @@ const Createlead = () => {
 
   return (
     <>
-
       <div>
         <button
           onClick={() => setOpen(true)}
           className="rounded-md bg-black px-2.5 py-1.5 text-sm font-semibold text-white inset-ring inset-ring-white/5 hover:bg-black/50"
         >
-          Open dialog
+          Create Lead
         </button>
         <Dialog open={open} onClose={setOpen} className="relative z-10">
           <DialogBackdrop

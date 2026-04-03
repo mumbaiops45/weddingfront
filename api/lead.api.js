@@ -2,8 +2,8 @@
 import axios from "axios";
 
 const apiClient = axios.create({
-  baseURL: "https://weddingbackend-qgwo.onrender.com",
-  // baseURL: "http://localhost:8080",
+  // baseURL: "https://weddingbackend-qgwo.onrender.com",
+  baseURL: "http://localhost:8080",
   headers: {
     "Content-Type": "application/json",
   },
@@ -15,7 +15,11 @@ apiClient.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-
+ 
+    if(originalRequest.url === "/refresh-token"){
+      window.location.href = "/login";
+      return Promise.reject(error);
+    }
     
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
@@ -65,4 +69,15 @@ export const getAllLeads = async () => {
 export const getleads = async(id) =>{
     const response = await apiClient.get(`/get/${id}`);
     return response.data.data;
+}
+
+
+export const createPackage = async(data)  => {
+  const response = await apiClient.post("/createpack", data);
+  return response.data;
+}
+
+export const getAllPackage = async()  => {
+  const response = await apiClient.get("/getpack");
+  return response.data;
 }

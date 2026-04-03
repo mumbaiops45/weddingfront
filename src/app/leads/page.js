@@ -11,13 +11,12 @@ const page = () => {
     if (error) return <p>{error}</p>;
     return (
         <div>
-            <Createlead/>
+            <Createlead />
             <div className="overflow-x-auto">
-                <table className="min-w-full border border-gray-300">
+                <table className="min-w-full text-[13px] border border-gray-300">
                     <thead className="bg-gray-100">
                         <tr>
-                            <th className="border px-4 py-2 text-left">Name</th>
-                            <th className="border px-4 py-2 text-left">Phone</th>
+                            <th className="border px-4 py-2 text-left">Name / Phone</th>
                             <th className="border px-4 py-2 text-left">Email</th>
                             <th className="border px-4 py-2 text-left">Wedding Date</th>
                             <th className="border px-4 py-2 text-left">Location</th>
@@ -29,14 +28,19 @@ const page = () => {
                     <tbody>
                         {leads.map((lead) => (
                             <tr key={lead._id} className="hover:bg-gray-50">
-                                <td className="border px-4 py-2">{lead.clientName}</td>
-                                <td className="border px-4 py-2">{lead.phone}</td>
-                                <td className="border px-4 py-2">{lead.email}</td>
-                                <td className="border px-4 py-2">{lead.weddingDateFormatted}</td>
-                                <td className="border px-4 py-2">{lead.location}</td>
-                                <td className="border px-4 py-2">{lead.budget}</td>
-                                <td className="border px-4 py-2">{lead.guestCount}</td>
-                                <td className="border px-4 py-2">{lead.status}</td>
+
+                                <td className="border px-4 py-1">
+                                    <div className="flex flex-col">
+                                        <span className="font-medium">{lead.clientName}</span>
+                                        <span className="text-sm text-gray-500">{lead.phone}</span>
+                                    </div>
+                                </td>
+                                <td className="border px-4 py-1">{lead.email}</td>
+                                <td className="border px-4 py-1">{lead.weddingDateFormatted}</td>
+                                <td className="border px-4 py-1">{lead.location}</td>
+                                <td className="border px-4 py-1">{lead.budget}</td>
+                                <td className="border px-4 py-1">{lead.guestCount}</td>
+                                <td className="border px-4 py-1">{lead.status}</td>
                             </tr>
                         ))}
                     </tbody>
