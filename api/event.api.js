@@ -1,10 +1,11 @@
 import axios from "axios";
+import apiClient from "../utils/apiClient";
 
-const apiClient = axios.create({
-  baseURL: "http://localhost:8080",
-  headers: { "Content-Type": "application/json" },
-  withCredentials: true,
-});
+// const apiClient = axios.create({
+//   baseURL: "http://localhost:8080",
+//   headers: { "Content-Type": "application/json" },
+//   withCredentials: true,
+// });
 
 export const createEventApi = async (data) => {
   const response = await apiClient.post("/events/create", data);

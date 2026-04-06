@@ -1,8 +1,14 @@
-
+"use client"
+import { useEffect } from "react";
 import {useCreatePackage , usePackageStore } from "../store/package.store";
 
 export const usePackages = () => {
     const {packages, loading, error, fetchPackages} = usePackageStore();
+    
+    
+  useEffect(() => {
+        fetchPackages();
+    }, [fetchPackages]);
     return {
         packages,
         loading,

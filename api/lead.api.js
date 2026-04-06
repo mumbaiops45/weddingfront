@@ -1,14 +1,15 @@
 
 import axios from "axios";
+import apiClient from "../utils/apiClient";
 
-const apiClient = axios.create({
-  // baseURL: "https://weddingbackend-qgwo.onrender.com",
-  baseURL: "http://localhost:8080",
-  headers: {
-    "Content-Type": "application/json",
-  },
-  withCredentials: true,
-});
+// const apiClient = axios.create({
+//   // baseURL: "https://weddingbackend-qgwo.onrender.com",
+//   baseURL: "http://localhost:8080",
+//   headers: {
+//     "Content-Type": "application/json",
+//   },
+//   withCredentials: true,
+// });
 
 
 apiClient.interceptors.response.use(

@@ -15,7 +15,7 @@ const Editpayment = ({ payment, onSuccess, onCancel }) => {
     status: "Pending",
   });
 
-  // ✅ Prefill form with existing payment data
+ 
   useEffect(() => {
     if (payment) {
       setFormData({
@@ -66,14 +66,14 @@ const Editpayment = ({ payment, onSuccess, onCancel }) => {
 
       <div className="p-6">
 
-        {/* Error */}
+       
         {error && (
           <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
             ❌ {error}
           </div>
         )}
 
-        {/* Success */}
+        
         {success && (
           <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg text-green-600 text-sm">
             ✅ Payment updated successfully!
@@ -83,7 +83,7 @@ const Editpayment = ({ payment, onSuccess, onCancel }) => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-            {/* Amount */}
+           
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Amount <span className="text-red-500">*</span>
@@ -102,7 +102,7 @@ const Editpayment = ({ payment, onSuccess, onCancel }) => {
               </div>
             </div>
 
-            {/* Payment Mode */}
+           
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Payment Mode <span className="text-red-500">*</span>
@@ -122,7 +122,7 @@ const Editpayment = ({ payment, onSuccess, onCancel }) => {
               </select>
             </div>
 
-            {/* Payment Date */}
+           
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Payment Date <span className="text-red-500">*</span>
@@ -137,7 +137,7 @@ const Editpayment = ({ payment, onSuccess, onCancel }) => {
               />
             </div>
 
-            {/* Status */}
+          
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Status <span className="text-red-500">*</span>
@@ -155,7 +155,7 @@ const Editpayment = ({ payment, onSuccess, onCancel }) => {
               </select>
             </div>
 
-            {/* Transaction ID */}
+            
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Transaction ID
@@ -171,7 +171,6 @@ const Editpayment = ({ payment, onSuccess, onCancel }) => {
               />
             </div>
 
-            {/* Notes */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Notes
@@ -188,7 +187,7 @@ const Editpayment = ({ payment, onSuccess, onCancel }) => {
             </div>
           </div>
 
-          {/* Buttons */}
+       
           <div className="flex gap-3 pt-2">
             <button
               type="submit"

@@ -1,18 +1,17 @@
 'use client'  
 
-import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
-import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useUser } from '../../../hooks/user.hook'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 const navigation = [
-  { name: 'Dashboard', href: 'dashboard', current: true },
-  { name: 'Leads', href: 'leads', current: false },
-  { name: 'Booking', href: 'booking', current: false },
-  { name: 'Packages', href: 'packages', current: false },
-  { name: 'Payment', href: 'payments', current: false },
-  { name: 'Events', href: 'events', current: false },
-  { name: 'Vender', href: 'vendors', current: false },
-  { name: 'Reports', href: 'reports', current: false },
+  { name: 'Dashboard', href: 'dashboard', icon: '📊' },
+  { name: 'Leads', href: 'leads', icon: '👥' },
+  { name: 'Booking', href: 'booking', icon: '📅' },
+  { name: 'Packages', href: 'packages', icon: '📦' },
+  { name: 'Payment', href: 'payments', icon: '💰' },
+  { name: 'Events', href: 'events', icon: '🎉' },
+  { name: 'Vendor', href: 'vendors', icon: '🏢' },
 ]
 
 function classNames(...classes) {
@@ -21,182 +20,144 @@ function classNames(...classes) {
 
 export default function Navbar() {
   const { logout, loading, user } = useUser()
+  const pathname = usePathname()
 
   return (
-    <Disclosure as="nav" className="relative bg-gray-800">
-      <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-        <div className="relative flex h-16 items-center justify-between">
-
-        
-          <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
-            <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-white/5 hover:text-white focus:outline-2 focus:-outline-offset-1 focus:outline-indigo-500">
-              <span className="sr-only">Open main menu</span>
-              <Bars3Icon aria-hidden="true" className="block h-6 w-6 group-data-open:hidden" />
-              <XMarkIcon aria-hidden="true" className="hidden h-6 w-6 group-data-open:block" />
-            </DisclosureButton>
+    <>
+      <div className="fixed left-0 top-0 h-full w-64 bg-white shadow-lg z-50">
+        <div className="flex flex-col h-full">
+          <div className="p-4 border-b border-gray-700">
+            <h1 className="text-black text-xl font-bold">Wedding Planner</h1>
           </div>
-
-         
-          <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-            <div className="flex shrink-0 items-center">
-              <img
-                alt="Your Company"
-                src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
-                className="h-8 w-auto"
-              />
-            </div>
-
-           
-            <div className="hidden sm:ml-6 sm:block">
-              <div className="flex space-x-4">
-                {navigation.map((item) => (
-                  <a
-                    key={item.name}
-                    href={item.href}
-                    aria-current={item.current ? 'page' : undefined}
-                    className={classNames(
-                      item.current
-                        ? 'bg-gray-900 text-white'
-                        : 'text-gray-300 hover:bg-white/5 hover:text-white',
-                      'rounded-md px-3 py-2 text-sm font-medium'
-                    )}
-                  >
-                    {item.name}
-                  </a>
-                ))}
-
-              
-                {!user && (
-                  <>
-                  <a
-                    
-                      href="login"
-                      className="text-gray-300 hover:bg-white/5 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+          <nav className="flex-1 p-4">
+            <ul className="space-y-2">
+              {navigation.map((item) => {
+                const isActive = pathname.includes(item.href)
+                return (
+                  <li key={item.name}>
+                    <Link 
+                      href={item.href}
+                      className={classNames(
+                        isActive
+                          ? 'bg-gray-200 text-black '
+                          : 'text-black  hover:bg-gray-100',
+                        'flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors'
+                      )}
                     >
-                      Login
-                    </a>
-                    <a
-                      href="signup"
-                      className="text-gray-300 hover:bg-white/5 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
-                    >
-                      Signup
-                    </a>
-                  </>
-                )}
+                      <span className="text-xl">{item.icon}</span>
+                      {item.name}
+                    </Link>
+                  </li>
+                )
+              })}
+            </ul>
+          </nav>
+
+          <div className="p-4 border-t border-gray-700">
+            {!user ? (
+              <div className="space-y-2">
+                <Link
+                  href="login"
+                  className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white transition-colors"
+                >
+                  <span>🔐</span>
+                  Login
+                </Link>
+                <Link
+                  href="signup"
+                  className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white transition-colors"
+                >
+                  <span>📝</span>
+                  Signup
+                </Link>
               </div>
-            </div>
-          </div>
-
-        
-          <div className="absolute inset-y-0 right-0 flex items-center gap-3 pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-            <button
-              type="button"
-              className="relative rounded-full p-1 text-gray-400 focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500"
-            >
-              <span className="sr-only">View notifications</span>
-              <BellIcon aria-hidden="true" className="h-6 w-6" />
-            </button>
-
-          
-            {user ? (
-              <Menu as="div" className="relative ml-3">
-                <MenuButton className="relative flex rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
-                  <span className="sr-only">Open user menu</span>
+            ) : (
+              <div>
+                <div className="flex items-center gap-3 px-3 py-2 mb-2">
                   <img
                     alt=""
                     src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                    className="h-8 w-8 rounded-full bg-gray-800 outline outline-1 outline-white/10"
+                    className="h-10 w-10 rounded-full bg-gray-800 outline outline-1 outline-white/10"
                   />
-                </MenuButton>
-
-                <MenuItems className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg outline outline-black/5">
-             
-                  <div className="px-4 py-2 text-sm text-gray-500 border-b">
-                    👋 {user.name}
+                  <div className="flex-1">
+                    <p className="text-white text-sm font-medium">{user.name}</p>
+                    <p className="text-gray-400 text-xs">{user.email}</p>
                   </div>
-                  <MenuItem>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    >
-                      Your Profile
-                    </a>
-                  </MenuItem>
-                  <MenuItem>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    >
-                      Settings
-                    </a>
-                  </MenuItem>
-               
-                  <MenuItem>
-                    <button
-                      onClick={logout}
-                      disabled={loading}
-                      className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
-                    >
-                      {loading ? "Logging out..." : "Logout"}
-                    </button>
-                  </MenuItem>
-                </MenuItems>
-              </Menu>
-            ) : null}
+                </div>
+                <button
+                  onClick={logout}
+                  disabled={loading}
+                  className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-red-400 hover:bg-white/5 hover:text-red-300 transition-colors w-full"
+                >
+                  <span>🚪</span>
+                  {loading ? "Logging out..." : "Logout"}
+                </button>
+              </div>
+            )}
           </div>
-
         </div>
       </div>
 
+    
+      <div className="lg:hidden fixed top-4 left-4 z-50">
+        <button
+          id="mobileMenuBtn"
+          className="p-2 rounded-md bg-gray-800 text-white"
+          onClick={() => {
+            const menu = document.getElementById('mobileMenu')
+            menu.classList.toggle('hidden')
+          }}
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
 
-      <DisclosurePanel className="sm:hidden">
-        <div className="space-y-1 px-2 pt-2 pb-3">
-          {navigation.map((item) => (
-            <DisclosureButton
-              key={item.name}
-              as="a"
-              href={item.href}
-              aria-current={item.current ? 'page' : undefined}
-              className={classNames(
-                item.current
-                  ? 'bg-gray-900 text-white'
-                  : 'text-gray-300 hover:bg-white/5 hover:text-white',
-                'block rounded-md px-3 py-2 text-base font-medium'
-              )}
-            >
-              {item.name}
-            </DisclosureButton>
-          ))}
-
-          {!user && (
-            <>
-              <DisclosureButton
-                as="a"
-                href="login"
-                className="text-gray-300 hover:bg-white/5 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
+      
+      <div id="mobileMenu" className="fixed inset-0 bg-gray-800 z-40 hidden lg:hidden">
+        <div className="p-4">
+          <button
+            className="absolute top-4 right-4 p-2 text-white"
+            onClick={() => {
+              document.getElementById('mobileMenu').classList.add('hidden')
+            }}
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+          <div className="mt-16">
+            {navigation.map((item) => (
+              <Link
+                key={item.name}
+                href={item.href}
+                className="flex items-center gap-3 rounded-md px-3 py-3 text-gray-300 hover:bg-white/5 hover:text-white text-base font-medium"
+                onClick={() => {
+                  document.getElementById('mobileMenu').classList.add('hidden')
+                }}
               >
-                Login
-              </DisclosureButton>
-              <DisclosureButton
-                as="a"
-                href="signup"
-                className="text-gray-300 hover:bg-white/5 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
-              >
-                Signup
-              </DisclosureButton>
-            </>
-          )}
-          {user && (
-            <button
-              onClick={logout}
-              disabled={loading}
-              className="text-red-400 hover:bg-white/5 block w-full text-left rounded-md px-3 py-2 text-base font-medium"
-            >
-              {loading ? "Logging out..." : "Logout"}
-            </button>
-          )}
+                <span className="text-xl">{item.icon}</span>
+                {item.name}
+              </Link>
+            ))}
+            {!user ? (
+              <>
+                <Link href="login" className="flex items-center gap-3 rounded-md px-3 py-3 text-gray-300 hover:bg-white/5 hover:text-white text-base font-medium">
+                  <span>🔐</span> Login
+                </Link>
+                <Link href="signup" className="flex items-center gap-3 rounded-md px-3 py-3 text-gray-300 hover:bg-white/5 hover:text-white text-base font-medium">
+                  <span>📝</span> Signup
+                </Link>
+              </>
+            ) : (
+              <button onClick={logout} className="flex items-center gap-3 rounded-md px-3 py-3 text-red-400 hover:bg-white/5 hover:text-red-300 text-base font-medium w-full">
+                <span>🚪</span> Logout
+              </button>
+            )}
+          </div>
         </div>
-      </DisclosurePanel>
-    </Disclosure>
+      </div>
+    </>
   )
 }

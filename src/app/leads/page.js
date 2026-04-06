@@ -1,7 +1,7 @@
 "use client"
 import React from 'react'
 import { useLeads } from '../../../hooks/lead.hook'
-import Createlead from '../components/Createlead'
+
 
 const page = () => {
 
@@ -11,21 +11,21 @@ const page = () => {
     if (error) return <p>{error}</p>;
     return (
         <div>
-            <Createlead />
-            <div className="overflow-x-auto">
-                <table className="min-w-full text-[13px] border border-gray-300">
-                    <thead className="bg-gray-100">
+            
+            <div className="overflow-x-auto rounded-lg border border-gray-200 shodow-sm">
+                <table className="min-w-full text-[13px] text-gray-700">
+                    <thead className="bg-blue-200 text-[10px] font-bold uppercase tracking-wider text-gray-600">
                         <tr>
-                            <th className="border px-4 py-2 text-left">Name / Phone</th>
-                            <th className="border px-4 py-2 text-left">Email</th>
-                            <th className="border px-4 py-2 text-left">Wedding Date</th>
-                            <th className="border px-4 py-2 text-left">Location</th>
-                            <th className="border px-4 py-2 text-left">Budget</th>
-                            <th className="border px-4 py-2 text-left">Guest Count</th>
-                            <th className="border px-4 py-2 text-left">Status</th>
+                            <th className="border px-4 py-2 text-center">Name / Phone</th>
+                            <th className=" border px-4 py-2 text-center">Email</th>
+                            <th className=" border px-4 py-2 text-center">Wedding Date</th>
+                            <th className="border px-4 py-2 text-center">Location</th>
+                            <th className="border px-4 py-2 text-center">Budget</th>
+                            <th className="border px-4 py-2 text-center">Guest Count</th>
+                            <th className="border px-4 py-2 text-center">Status</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody  >
                         {leads.map((lead) => (
                             <tr key={lead._id} className="hover:bg-gray-50">
 

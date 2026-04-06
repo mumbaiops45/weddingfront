@@ -3,10 +3,12 @@
 import React, { useState } from "react";
 import { useCreateEvent } from "../../../hooks/event.hook";
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
+import { useBookings } from '../../../hooks/booking.hooks';
 
 
 const CreateEvent = ({ onSuccess }) => {
     const { createEvent, loading, error, success, reset } = useCreateEvent();
+    const { bookings, loading: bookingsLoading, error: bookingsError } = useBookings();
     const [open, setOpen] = useState(true)
     const [formData, setFormData] = useState({
         booking: "",
@@ -90,26 +92,34 @@ const CreateEvent = ({ onSuccess }) => {
                                                 <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg text-green-600 text-sm">
                                                     ✅ Event created successfully!
                                                 </div>
-                                            )}  
+                                            )}
 
-                                             <p   onClick={() => setOpen(false)}>X</p>
+                                            <p onClick={() => setOpen(false)}>X</p>
 
                                             <form onSubmit={handleSubmit} className="space-y-4">
                                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          
+
                                                     <div>
                                                         <label className="block text-sm font-medium text-gray-700 mb-1">
                                                             Booking ID <span className="text-red-500">*</span>
                                                         </label>
-                                                        <input
-                                                            type="text"
+                                                        <select
                                                             name="booking"
                                                             value={formData.booking}
-                                                            onChange={handleChange}
+                                                            onChange={(e) => setFormData({ ...formData, booking: e.target.value })}
                                                             required
-                                                            placeholder="Enter booking ID"
-                                                            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none"
-                                                        />
+                                                            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-blue-500 outline-none transition"
+                                                        >
+                                                            <option value="">
+                                                                {bookingsLoading ? "Loading bookings..." : "Select Booking"}
+                                                            </option>
+
+                                                            {(bookings || []).map((b) => (
+                                                                <option key={b._id} value={b._id}>
+                                                                    {b.lead?.clientName}
+                                                                </option>
+                                                            ))}
+                                                        </select>
                                                     </div>
 
                                                     <div>

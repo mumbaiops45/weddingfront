@@ -142,7 +142,7 @@ const Page = () => {
               key={booking._id}
               className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm"
             >
-              {/* Header */}
+              
               <div className="flex justify-between items-start mb-4">
                 <div>
                   <h3 className="text-lg font-semibold text-gray-800">
@@ -162,7 +162,6 @@ const Page = () => {
                 </div>
               </div>
 
-              {/* Details */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4 text-sm">
                 <div>
                   <p className="text-gray-500">Event Date</p>
@@ -182,7 +181,7 @@ const Page = () => {
                 </div>
               </div>
 
-              {/* Vendors */}
+             
               {booking.vendors?.length > 0 && (
                 <div className="mb-4">
                   <p className="text-sm text-gray-500 mb-1">Vendors</p>
@@ -196,17 +195,17 @@ const Page = () => {
                 </div>
               )}
 
-              {/* Rejection Reason */}
+              
               {booking.rejectionReason && (
                 <div className="mb-4 p-3 bg-red-50 rounded-lg text-sm text-red-600">
                   Rejection reason: {booking.rejectionReason}
                 </div>
               )}
 
-              {/* Actions */}
+             
               <div className="flex flex-wrap gap-2 pt-4 border-t border-gray-100">
 
-                {/* ✅ Update Button */}
+                
                 {booking.status !== "Cancelled" && booking.status !== "Completed" && (
                   <button
                     onClick={() => openUpdateModal(booking)}
@@ -273,7 +272,7 @@ const Page = () => {
         </div>
       )}
 
-      {/* Pagination */}
+      
       {pagination && (
         <div className="mt-6 flex justify-between items-center text-sm text-gray-600">
           <p>Total: {pagination.total} bookings</p>
@@ -281,7 +280,7 @@ const Page = () => {
         </div>
       )}
 
-      {/* ✅ Update Modal */}
+      
       {updateModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white rounded-xl p-6 w-full max-w-md">
@@ -344,7 +343,7 @@ const Page = () => {
         </div>
       )}
 
-      {/* Reject Modal */}
+     
       {rejectModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white rounded-xl p-6 w-full max-w-md">

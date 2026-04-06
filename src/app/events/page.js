@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { useEvents, useEventActions } from "../../../hooks/event.hook";
-// import CreateEvent from "./CreateEvent";
 import CreateEvent from "../components/CreateEvent";
 import EditEvent from "../components/EditEvent";
 
@@ -28,7 +27,7 @@ const EventList = () => {
   return (
     <div className="max-w-7xl mx-auto p-6">
 
-      {/* ✅ Header */}
+      
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-gray-800">All Events</h2>
         <button
@@ -39,7 +38,7 @@ const EventList = () => {
         </button>
       </div>
 
-      {/* ✅ Create Form */}
+     
       {showCreate && (
         <div className="mb-6">
           <CreateEvent
@@ -50,7 +49,7 @@ const EventList = () => {
         </div>
       )}
 
-      {/* ✅ Edit Form */}
+      
       {editingEvent && (
         <div className="mb-6">
           <EditEvent
@@ -61,14 +60,14 @@ const EventList = () => {
         </div>
       )}
 
-      {/* ✅ Error */}
+      
       {error && (
         <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
           {error}
         </div>
       )}
 
-      {/* ✅ Event List */}
+      
       {!events || events.length === 0 ? (
         <div className="text-center text-gray-500 py-10 bg-white rounded-xl border border-gray-200">
           No events found
@@ -80,7 +79,7 @@ const EventList = () => {
               key={event._id}
               className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition"
             >
-              {/* Card Header */}
+              
               <div className="flex justify-between items-start mb-4">
                 <div>
                   <h3 className="text-lg font-semibold text-gray-800">
@@ -95,7 +94,7 @@ const EventList = () => {
                 </span>
               </div>
 
-              {/* Details Grid */}
+              
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4 text-sm">
                 <div>
                   <p className="text-gray-400 text-xs mb-0.5">Event Date</p>
@@ -129,7 +128,7 @@ const EventList = () => {
                 </div>
               </div>
 
-              {/* Notes */}
+             
               {event.notes?.length > 0 && (
                 <div className="mb-4">
                   <p className="text-xs text-gray-400 mb-1">Notes</p>
@@ -146,7 +145,7 @@ const EventList = () => {
                 </div>
               )}
 
-              {/* Actions */}
+           
               <div className="flex gap-2 pt-4 border-t border-gray-100">
                 <button
                   onClick={() => {
@@ -171,7 +170,7 @@ const EventList = () => {
         </div>
       )}
 
-      {/* Pagination */}
+     
       {pagination && (
         <div className="mt-6 flex justify-between items-center text-sm text-gray-500">
           <p>Total: {pagination.total} events</p>

@@ -1,23 +1,25 @@
 "use client";
 
-import React, {useState} from 'react';
-import {useCreatePayment} from "../../../hooks/payment.hook";
+import React, { useState } from 'react';
+import { useCreatePayment } from "../../../hooks/payment.hook";
+import { useBookings } from '../../../hooks/booking.hooks';
 
 const Createpayment = () => {
-    // const {createPayment , loading, error, success, react} = usePayments();
-    const {createPayment, loading, error, success, reset} = useCreatePayment();
 
-    const [formData , setFormData] = useState({    
-        booking: "",
-        amount: "",
-        paymentMethod: "Cash",
-        paymentDate: "",
-        transactionId: "",
-        transactionId: "",
-        notes: "",
-    });
+  const { createPayment, loading, error, success, reset } = useCreatePayment();
+  const { bookings, loading: bookingsLoading, error: bookingsError } = useBookings();
 
-    const handleChange = (e) => {
+  const [formData, setFormData] = useState({
+    booking: "",
+    amount: "",
+    paymentMethod: "Cash",
+    paymentDate: "",
+    transactionId: "",
+    transactionId: "",
+    notes: "",
+  });
+
+  const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -63,14 +65,14 @@ const Createpayment = () => {
 
         <div className="p-6">
 
-         
+
           {error && (
             <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
               ❌ {error}
             </div>
           )}
 
-         
+
           {success && (
             <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg text-green-600 text-sm">
               ✅ Payment created successfully!
@@ -79,23 +81,31 @@ const Createpayment = () => {
 
           <form onSubmit={handleSubmit} className="space-y-4">
 
-         
+
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Booking ID <span className="text-red-500">*</span>
               </label>
-              <input
-                type="text"
+              <select
                 name="booking"
                 value={formData.booking}
-                onChange={handleChange}
+                onChange={(e) => setFormData({ ...formData, booking: e.target.value })}
                 required
-                placeholder="Enter booking ID"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none transition"
-              />
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-blue-500 outline-none transition"
+              >
+                <option value="">
+                  {bookingsLoading ? "Loading bookings..." : "Select Booking"}
+                </option>
+
+                {(bookings || []).map((b) => (
+                  <option key={b._id} value={b._id}>
+                    {b.lead?.clientName} 
+                  </option>
+                ))}
+              </select>
             </div>
 
-            {/* Amount */}
+
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Amount <span className="text-red-500">*</span>
@@ -115,7 +125,6 @@ const Createpayment = () => {
               </div>
             </div>
 
-            {/* Payment Method */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Payment Method <span className="text-red-500">*</span>
@@ -135,7 +144,6 @@ const Createpayment = () => {
               </select>
             </div>
 
-            {/* Payment Date */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Payment Date <span className="text-red-500">*</span>
@@ -150,7 +158,7 @@ const Createpayment = () => {
               />
             </div>
 
-            {/* Transaction ID */}
+            
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Transaction ID
@@ -166,7 +174,7 @@ const Createpayment = () => {
               />
             </div>
 
-            {/* Notes */}
+          
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Notes
@@ -182,7 +190,7 @@ const Createpayment = () => {
               />
             </div>
 
-            {/* Buttons */}
+        
             <div className="flex gap-3 pt-2">
               <button
                 type="submit"

@@ -25,13 +25,13 @@ export const useBookingStore = create((set) => ({
   error: null,
   success: false,
 
-  // ✅ Sort state
+
   sortBy: "createdAt",
   order: "desc",
 
   reset: () => set({ error: null, success: false }),
 
-  // ✅ Set order and re-fetch
+  
   setOrder: (order, sortBy = "createdAt") => {
     set({ order, sortBy });
   },
@@ -49,7 +49,7 @@ export const useBookingStore = create((set) => ({
     }
   },
 
-  // ✅ NEW — Fetch with order
+  
   fetchBookingsByOrder: async (order, sortBy) => {
     set({ loading: true, error: null, order, sortBy });
     try {
@@ -116,7 +116,7 @@ export const useBookingStore = create((set) => ({
     }
   },
 
-  // ✅ NEW — Bulk update multiple fields
+ 
   bulkUpdateBooking: async (id, data) => {
     set({ loading: true, error: null, success: false });
     try {
