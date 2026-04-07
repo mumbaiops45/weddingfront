@@ -53,7 +53,7 @@ const EditVendor = ({ vendor, onClose }) => {
         <>
 
             <div
-                className="fixed inset-0 bg-black bg-opacity-50 z-40"
+                className="fixed inset-0 z-40 bg-black/40 backdrop-blur-md"
                 onClick={onClose}
             />
 

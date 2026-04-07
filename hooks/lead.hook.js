@@ -1,6 +1,39 @@
 "use client"
 import { useEffect } from "react";
-import { useLeadsStore, useCreateLeadStore } from "../store/lead.store"; 
+import { useLeadsStore, useCreateLeadStore  , useSearchStore} from "../store/lead.store"; 
+import { searchService } from "../service/lead.service";
+
+
+export const useSearchLeads = () => {
+  const {
+    searchResults,
+    loading,
+    error,
+    query,
+    setQuery,
+    searchLeads,
+    clearSearch
+  } = useSearchStore();
+
+  useEffect(() => {
+    if(!query){
+      clearSearch();
+      return;
+    }
+
+    const debounceTimeout = setTimeout(() => {
+      searchLeads(query);
+    }, 300);
+
+    return () => clearTimeout(debounceTimeout);
+  }, [query, searchLeads, clearSearch]);
+
+  const updateQuery = (newQuery) => {
+    setQuery(newQuery);
+  };
+
+  return {searchResults, loading, error, query, updateQuery, clearSearch};
+}
 
 export const useLeads = () => {
   const { leads, loading, error, fetchLeads } = useLeadsStore();

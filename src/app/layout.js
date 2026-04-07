@@ -8,7 +8,7 @@ export default function RootLayout({ children }) {
       <body suppressHydrationWarning={true}>
         <Navbar />
         <div className="pl-64">
-          <Createlead/>
+          {/* <Createlead/> */}
           {children}
         </div>
 

@@ -84,7 +84,7 @@ const Createpayment = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Booking ID <span className="text-red-500">*</span>
+                Booking Name <span className="text-red-500">*</span>
               </label>
               <select
                 name="booking"

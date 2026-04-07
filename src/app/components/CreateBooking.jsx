@@ -89,236 +89,242 @@ const CreateBooking = () => {
   }, [fetchVendors]);
 
   return (
-    <div className="mb-6">
-
-
-      <button
-        onClick={() => setShowForm(!showForm)}
-        className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700"
-      >
-        {showForm ? "Cancel" : "+ Create Booking"}
-      </button>
-
+    <div className="p-2  ">
+      <div className="flex justify-end">
+        <button
+          onClick={() => setShowForm(!showForm)}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700"
+        >
+          Create Booking
+        </button>
+      </div>
 
       {showForm && (
-        <div className="mt-4 bg-white rounded-xl border border-gray-200 p-6">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">
-            Create New Booking
-          </h3>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
 
-
-          {error && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
-              {error}
-            </div>
-          )}
-
-
-          {success && (
-            <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg text-green-600 text-sm">
-              Booking created successfully!
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Lead ID <span className="text-red-500">*</span>
-                </label>
-                <select
-                  name="lead"
-                  value={formData.lead}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-3 py-2 border rounded-lg text-sm"
-                >
-                  <option value="">
-                    {leadsLoading ? "Loading leads..." : "Select Lead"}
-                  </option>
-
-                  {leads.map((lead) => (
-                    <option key={lead._id} value={lead._id}>
-                      {lead.clientName}
-                    </option>
-                  ))}
-                </select>
-
+          <div
+            className="bg-white w-full max-w-3xl rounded-xl shadow-lg p-6 relative"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setShowForm(false)}
+              className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-xl font-bold"
+            >
+              ×
+            </button>
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">
+              Create New Booking
+            </h3>
+            {error && (
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
+                {error}
+              </div>
+            )}
+            {success && (
+              <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg text-green-600 text-sm">
+                Booking created successfully!
               </div>
 
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Package ID <span className="text-red-500">*</span>
-                </label>
-
-
-                <select
-                  name="package"
-                  value={formData.package}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-3 py-2 border rounded-lg text-sm"
-                >
-                  <option value="">
-                    {packagesLoading ? "Loading packages..." : "Select Package"}
-                  </option>
-                  {packages.map((p) => (
-                    <option key={p._id} value={p._id}>
-                      {p.name}
+            )}
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Lead Name <span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    name="lead"
+                    value={formData.lead}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-3 py-2 border rounded-lg text-sm"
+                  >
+                    <option value="">
+                      {leadsLoading ? "Loading leads..." : "Select Lead"}
                     </option>
-                  ))}
-                </select>
-              </div>
 
-
-
-              <div className="col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Vendors <span className="text-red-500">*</span>
-                </label>
-
-                {formData.vendors.map((v, index) => (
-                  <div key={index} className="flex gap-2 mb-2">
-                    <select
-                      value={v.vendor}
-                      onChange={(e) => handleVendorChange(index, "vendor", e.target.value)}
-                      required
-                      className="w-1/2 px-3 py-2 border border-gray-300 rounded-lg text-sm"
-                    >
-                      <option value="">
-                        {vendorsLoading ? "Loading vendors..." : "Select Vendor"}
+                    {leads.map((lead) => (
+                      <option key={lead._id} value={lead._id}>
+                        {lead.clientName}
                       </option>
+                    ))}
+                  </select>
 
-                      {vendors.map((vendor) => (
-                        <option key={vendor._id} value={vendor._id}>
-                          {vendor.name}
-                        </option>
-                      ))}
-                    </select>
-                    <select
-                      value={v.vendor}
-                      onChange={(e) => handleVendorChange(index, "vendor", e.target.value)}
-                      required
-                      className="w-1/2 px-3 py-2 border border-gray-300 rounded-lg text-sm"
-                    >
-                      <option value="">
-                        {vendorsLoading ? "Loading vendors..." : "Select Vendor"}
+                </div>
+
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Package Name <span className="text-red-500">*</span>
+                  </label>
+
+
+                  <select
+                    name="package"
+                    value={formData.package}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-3 py-2 border rounded-lg text-sm"
+                  >
+                    <option value="">
+                      {packagesLoading ? "Loading packages..." : "Select Package"}
+                    </option>
+                    {packages.map((p) => (
+                      <option key={p._id} value={p._id}>
+                        {p.name}
                       </option>
-
-                      {vendors.map((vendor) => (
-                        <option key={vendor._id} value={vendor._id}>
-                          ({vendor.serviceType})
-                        </option>
-                      ))}
-                    </select>
+                    ))}
+                  </select>
+                </div>
 
 
-                    {formData.vendors.length > 1 && (
-                      <button
-                        type="button"
-                        onClick={() => removeVendor(index)}
-                        className="px-2 text-red-500"
+
+                <div className="col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Vendors <span className="text-red-500">*</span>
+                  </label>
+
+                  {formData.vendors.map((v, index) => (
+                    <div key={index} className="flex gap-2 mb-2">
+                      <select
+                        value={v.vendor}
+                        onChange={(e) => handleVendorChange(index, "vendor", e.target.value)}
+                        required
+                        className="w-1/2 px-3 py-2 border border-gray-300 rounded-lg text-sm"
                       >
-                        ✕
-                      </button>
-                    )}
-                  </div>
-                ))}
+                        <option value="">
+                          {vendorsLoading ? "Loading vendors..." : "Select Vendor"}
+                        </option>
+
+                        {vendors.map((vendor) => (
+                          <option key={vendor._id} value={vendor._id}>
+                            {vendor.name}
+                          </option>
+                        ))}
+                      </select>
+                      <select
+                        value={v.vendor}
+                        onChange={(e) => handleVendorChange(index, "vendor", e.target.value)}
+                        required
+                        className="w-1/2 px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                      >
+                        <option value="">
+                          {vendorsLoading ? "Loading vendors..." : "Select Vendor"}
+                        </option>
+
+                        {vendors.map((vendor) => (
+                          <option key={vendor._id} value={vendor._id}>
+                            ({vendor.serviceType})
+                          </option>
+                        ))}
+                      </select>
 
 
+                      {formData.vendors.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => removeVendor(index)}
+                          className="px-2 text-red-500"
+                        >
+                          ✕
+                        </button>
+                      )}
+                    </div>
+                  ))}
+
+
+                  <button
+                    type="button"
+                    onClick={addVendor}
+                    className="mt-2 text-blue-600 text-sm"
+                  >
+                    + Add Vendor
+                  </button>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Event Date <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="date"
+                    name="eventDate"
+                    value={formData.eventDate}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+                  />
+                </div>
+
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Total Price <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="number"
+                    name="totalPrice"
+                    value={formData.totalPrice}
+                    onChange={handleChange}
+                    required
+                    placeholder="500000"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+                  />
+                </div>
+
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Payment Status
+                  </label>
+                  <select
+                    name="paymentStatus"
+                    value={formData.paymentStatus}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-white"
+                  >
+                    <option value="Pending">Pending</option>
+                    <option value="Partial">Partial</option>
+                    <option value="Paid">Paid</option>
+                    <option value="Overdue">Overdue</option>
+                  </select>
+                </div>
+
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Notes
+                  </label>
+                  <input
+                    type="text"
+                    name="notes"
+                    value={formData.notes}
+                    onChange={handleChange}
+                    placeholder="Initial booking created"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+                  />
+                </div>
+              </div>
+
+
+              <div className="flex gap-3 pt-2">
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="flex-1 bg-blue-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-blue-700 disabled:opacity-50"
+                >
+                  {loading ? "Creating..." : "Create Booking"}
+                </button>
                 <button
                   type="button"
-                  onClick={addVendor}
-                  className="mt-2 text-blue-600 text-sm"
+                  onClick={() => setShowForm(false)}
+                  className="px-6 border border-gray-300 text-gray-700 py-2 rounded-lg text-sm hover:bg-gray-50"
                 >
-                  + Add Vendor
+                  Cancel
                 </button>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Event Date <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="date"
-                  name="eventDate"
-                  value={formData.eventDate}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none"
-                />
-              </div>
-
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Total Price <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="number"
-                  name="totalPrice"
-                  value={formData.totalPrice}
-                  onChange={handleChange}
-                  required
-                  placeholder="500000"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none"
-                />
-              </div>
-
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Payment Status
-                </label>
-                <select
-                  name="paymentStatus"
-                  value={formData.paymentStatus}
-                  onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-white"
-                >
-                  <option value="Pending">Pending</option>
-                  <option value="Partial">Partial</option>
-                  <option value="Paid">Paid</option>
-                  <option value="Overdue">Overdue</option>
-                </select>
-              </div>
-
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Notes
-                </label>
-                <input
-                  type="text"
-                  name="notes"
-                  value={formData.notes}
-                  onChange={handleChange}
-                  placeholder="Initial booking created"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none"
-                />
-              </div>
-            </div>
-
-
-            <div className="flex gap-3 pt-2">
-              <button
-                type="submit"
-                disabled={loading}
-                className="flex-1 bg-blue-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-blue-700 disabled:opacity-50"
-              >
-                {loading ? "Creating..." : "Create Booking"}
-              </button>
-              <button
-                type="button"
-                onClick={() => setShowForm(false)}
-                className="px-6 border border-gray-300 text-gray-700 py-2 rounded-lg text-sm hover:bg-gray-50"
-              >
-                Cancel
-              </button>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
       )}
     </div>

@@ -1,16 +1,21 @@
 "use client"
 import React from 'react'
-import { useLeads } from '../../../hooks/lead.hook'
+import { useLeads , useSearchLeads  } from '../../../hooks/lead.hook'
+import Createlead from '../components/Createlead'
 
 
 const page = () => {
 
     const { leads, loading, error } = useLeads();
 
+    // const { searchResults, query, updateQuery } = useSearchLeads();
+    
+
     if (loading) return <p>Loading leads...</p>;
     if (error) return <p>{error}</p>;
     return (
         <div>
+            <Createlead />
             
             <div className="overflow-x-auto rounded-lg border border-gray-200 shodow-sm">
                 <table className="min-w-full text-[13px] text-gray-700">
@@ -38,13 +43,15 @@ const page = () => {
                                 <td className="border px-4 py-1">{lead.email}</td>
                                 <td className="border px-4 py-1">{lead.weddingDateFormatted}</td>
                                 <td className="border px-4 py-1">{lead.location}</td>
-                                <td className="border px-4 py-1">{lead.budget}</td>
+                                <td className="border px-4 py-1">₹{new Intl.NumberFormat('en-IN').format(lead.budget)}</td>
                                 <td className="border px-4 py-1">{lead.guestCount}</td>
                                 <td className="border px-4 py-1">{lead.status}</td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
+
+               
             </div>
         </div>
     )

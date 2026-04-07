@@ -35,7 +35,7 @@ const page = () => {
       ) : (
         <div className="overflow-x-auto">
           <table className="min-w-full border border-gray-200 rounded-lg">
-            <thead className="bg-gray-100">
+            <thead className="bg-gray-100 text-[12px]">
               <tr>
                 <th className="px-4 py-2 border">Name</th>
                 <th className="px-4 py-2 border">Email</th>
@@ -48,7 +48,7 @@ const page = () => {
             </thead>
             <tbody>
               {vendors.map((v) => (
-                <tr key={v._id} className="hover:bg-gray-50">
+                <tr key={v._id} className="hover:bg-gray-50 text-[12px]">
                   <td className="px-4 py-2 border">{v.name}</td>
                   <td className="px-4 py-2 border">{v.email}</td>
                   <td className="px-4 py-2 border">{v.phone}</td>

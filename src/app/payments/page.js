@@ -60,10 +60,8 @@ const Page = () => {
 
   return (
 
-
-
     <div className="max-w-7xl mx-auto p-6">
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">
         <div>
           <h2 className="text-2xl font-bold text-gray-800">Payments</h2>
           <p className="text-sm text-gray-500 mt-0.5">
@@ -72,7 +70,7 @@ const Page = () => {
         </div>
         <button
           onClick={() => { setShowCreate(!showCreate); setEditingPayment(null); }}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition"
+          className="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition"
         >
           {showCreate ? "Cancel" : "+ Add Payment"}
         </button>
@@ -96,16 +94,16 @@ const Page = () => {
         </div>
       )}
 
-    
+
       {error && (
         <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
           {error}
         </div>
       )}
 
-   
+
       {payments.length > 0 && (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
           <div className="bg-white rounded-xl border border-gray-200 p-4">
             <p className="text-xs text-gray-400 mb-1">Total Payments</p>
             <p className="text-xl font-bold text-gray-800">{payments.length}</p>
@@ -130,8 +128,6 @@ const Page = () => {
           </div>
         </div>
       )}
-
-    
       {!payments || payments.length === 0 ? (
         <div className="text-center text-gray-500 py-10 bg-white rounded-xl border border-gray-200">
           No payments found
@@ -143,7 +139,6 @@ const Page = () => {
               key={payment._id}
               className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition"
             >
-             
               <div className="flex justify-between items-start mb-4">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center text-lg">
@@ -167,8 +162,6 @@ const Page = () => {
                   </p>
                 </div>
               </div>
-
-             
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4 text-sm">
                 <div>
                   <p className="text-xs text-gray-400 mb-0.5">Payment Mode</p>
@@ -196,7 +189,7 @@ const Page = () => {
                 </div>
               </div>
 
-             
+
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4 text-sm bg-gray-50 rounded-lg p-3">
                 <div>
                   <p className="text-xs text-gray-400 mb-0.5">Booking Total</p>
@@ -210,20 +203,21 @@ const Page = () => {
                     {formatDate(payment.booking?.eventDate)}
                   </p>
                 </div>
+                
                 <div>
                   <p className="text-xs text-gray-400 mb-0.5">Booking Status</p>
                   <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${payment.booking?.status === "Confirmed"
-                      ? "bg-green-100 text-green-700"
-                      : payment.booking?.status === "Cancelled"
-                        ? "bg-red-100 text-red-700"
-                        : "bg-yellow-100 text-yellow-700"
+                    ? "bg-green-100 text-green-700"
+                    : payment.booking?.status === "Cancelled"
+                      ? "bg-red-100 text-red-700"
+                      : "bg-yellow-100 text-yellow-700"
                     }`}>
                     {payment.booking?.status || "N/A"}
                   </span>
                 </div>
               </div>
 
-              
+
               {payment.notes && (
                 <div className="mb-4">
                   <p className="text-xs text-gray-400 mb-1">Notes</p>
@@ -233,7 +227,7 @@ const Page = () => {
                 </div>
               )}
 
-              
+
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4 text-xs text-gray-500 border-t border-gray-100 pt-3">
                 <div>
                   <span className="text-gray-400">Location: </span>
@@ -256,7 +250,7 @@ const Page = () => {
               <div className="flex gap-2 pt-3 border-t border-gray-100">
                 <button
                   onClick={() => {
-                    setEditingPayment(payment); 
+                    setEditingPayment(payment);
                     setShowCreate(false);
                     window.scrollTo({ top: 0, behavior: "smooth" });
                   }}
@@ -280,6 +274,7 @@ const Page = () => {
         </div>
       )}
     </div>
+    
   );
 };
 

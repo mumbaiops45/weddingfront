@@ -1,15 +1,5 @@
-
-import axios from "axios";
 import apiClient from "../utils/apiClient";
 
-// const apiClient = axios.create({
-//   // baseURL: "https://weddingbackend-qgwo.onrender.com",
-//   baseURL: "http://localhost:8080",
-//   headers: {
-//     "Content-Type": "application/json",
-//   },
-//   withCredentials: true,
-// });
 
 
 apiClient.interceptors.response.use(
@@ -55,7 +45,12 @@ export const refreshToken = async () => {
 export const logoutUser = async () => {
   const response = await apiClient.post("/logout");
   return response.data;
-};
+};  
+
+export const searchLead = async (query) => {
+  const response = await apiClient.get("/search", {params:{query}});
+  return response.data;
+}
  
 export const createLead = async (data) => {
   const response = await apiClient.post("/create", data);

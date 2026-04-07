@@ -1,7 +1,30 @@
 import { create } from "zustand";
-import { fetchLeadsService  , fetchsingleLeadsService , createLeadService } from "../service/lead.service";
+import { fetchLeadsService , searchService  , fetchsingleLeadsService , createLeadService } from "../service/lead.service";
 
 
+export const useSearchStore = create ((set) =>({
+    searchResults: [],
+    loading: false,
+    error: null,
+    query: "",
+
+    setQuery: (query) => set({query}),
+
+    searchLeads: async (query) => {
+        set({loading: true, error: null});
+
+        try{
+            const results = await searchService(query);
+            set({searchResults: results, loading: false});
+        } catch (error){
+            set({
+                error: error.message || "Failed to search leads",
+                loading: false,
+            });
+        }
+    },
+    clearSearch: () => set({searchResults: [], error: null}),
+}));
 
 export const useLeadsStore = create((set) => ({
     leads: [],

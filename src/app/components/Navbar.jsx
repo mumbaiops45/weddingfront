@@ -22,9 +22,9 @@ export default function Navbar() {
   const { logout, loading, user } = useUser()
   const pathname = usePathname()
 
-  return (
+  return (  
     <>
-      <div className="fixed left-0 top-0 h-full w-64 bg-white shadow-lg z-50">
+      <div className="absolute fixed left-0 top-0 h-full w-64 bg-white shadow-lg">
         <div className="flex flex-col h-full">
           <div className="p-4 border-b border-gray-700">
             <h1 className="text-black text-xl font-bold">Wedding Planner</h1>
@@ -58,14 +58,14 @@ export default function Navbar() {
               <div className="space-y-2">
                 <Link
                   href="login"
-                  className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white transition-colors"
+                  className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium  text-black  hover:bg-gray-100 transition-colors"
                 >
                   <span>🔐</span>
                   Login
                 </Link>
                 <Link
                   href="signup"
-                  className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white transition-colors"
+                  className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium  text-black  hover:bg-gray-100 transition-colors"
                 >
                   <span>📝</span>
                   Signup
