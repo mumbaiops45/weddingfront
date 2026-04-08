@@ -24,7 +24,7 @@ export default function Navbar() {
 
   return (  
     <>
-      <div className="absolute fixed  left-0 top-0 h-full w-64 bg-gray-200 shadow-lg">
+      <div className="absolute fixed  left-0 top-0 h-full w-64 bg-gray-50 shadow-lg">
         <div className="flex flex-col h-full">
           <div className="p-4 border-b border-gray-700">
             <h1 className="text-black text-[15px] font-bold">Wedding Planner</h1>
@@ -39,8 +39,8 @@ export default function Navbar() {
                       href={item.href}
                       className={classNames(
                         isActive
-                          ? 'bg-gray-400 text-black '
-                          : 'text-black  hover:bg-gray-100',
+                          ? 'bg-gray-300 text-black '
+                          : 'text-black  hover:bg-gray-200',
                         'flex items-center gap-3 rounded-md px-3 py-2 text-[14px] font-medium transition-colors'
                       )}
                     >
