@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useUpdateEvent } from "../../../hooks/event.hook";
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
-
+import {useToast} from "../../../hooks/useToast";
 
 const EditEvent = ({ event, onSuccess, onCancel }) => {
     const { updateEvent, loading, error, success, reset } = useUpdateEvent();

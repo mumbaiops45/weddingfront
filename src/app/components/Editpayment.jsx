@@ -2,9 +2,11 @@
 
 import React, { useState, useEffect } from "react";
 import { useUpdatePayment } from "../../../hooks/payment.hook";
+import useToast from "../../../hooks/useToast";
 
 const Editpayment = ({ payment, onSuccess, onCancel }) => {
   const { updatePayment, loading, error, success, reset } = useUpdatePayment();
+  const {showSuccess , showError} = useToast();
 
   const [formData, setFormData] = useState({
     amount: "",
@@ -48,15 +50,18 @@ const Editpayment = ({ payment, onSuccess, onCancel }) => {
     const result = await updatePayment(payment._id, data);
 
     if (result) {
+      showSuccess("Payment updated successfully!");
       reset();
       if (onSuccess) onSuccess();
+    } else if (error){
+      showError(error || "Failed to update payment.");
     }
   };
 
   return (
     <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
 
-      {/* Header */}
+      
       <div className="px-6 py-4 bg-gradient-to-r from-indigo-50 to-purple-50 border-b border-gray-200">
         <h2 className="text-xl font-semibold text-gray-800">Edit Payment</h2>
         <p className="text-sm text-gray-500 mt-0.5">

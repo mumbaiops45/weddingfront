@@ -4,12 +4,13 @@ import React, { useState } from "react";
 import { useCreateEvent } from "../../../hooks/event.hook";
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
 import { useBookings } from '../../../hooks/booking.hooks';
-
+import { useToast } from "../../../hooks/useToast";
 
 const CreateEvent = ({ onSuccess }) => {
     const { createEvent, loading, error, success, reset } = useCreateEvent();
     const { bookings, loading: bookingsLoading, error: bookingsError } = useBookings();
     const [open, setOpen] = useState(true)
+    const { showSuccess, showError } = useToast();
     const [formData, setFormData] = useState({
         booking: "",
         eventType: "Wedding",
@@ -27,6 +28,36 @@ const CreateEvent = ({ onSuccess }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        if (!formData.booking) {
+            showError("Please select a booking");
+            return;
+        }
+
+        if (!formData.eventDate) {
+            showError("Please select event Date");
+            return;
+        }
+
+        if (!formData.startTime) {
+            showError("Please select start time");
+            return;
+        }
+
+        if (!formData.endTime) {
+            showError("Please select end time");
+            return;
+        }
+
+        if (!formData.venue) {
+            showError("Please enter venue");
+            return;
+        }
+
+        if (formData.startTime >= formData.endTime) {
+            showError("End time must be after start time");
+            return;
+        }
+
         const data = {
             booking: formData.booking,
             eventType: formData.eventType,
@@ -37,20 +68,29 @@ const CreateEvent = ({ onSuccess }) => {
             notes: formData.notes ? [formData.notes] : [],
         };
 
-        const result = await createEvent(data);
+        try {
 
-        if (result) {
-            setFormData({
-                booking: "",
-                eventType: "Wedding",
-                eventDate: "",
-                startTime: "",
-                endTime: "",
-                venue: "",
-                notes: "",
-            });
-            reset();
-            if (onSuccess) onSuccess();
+
+            const result = await createEvent(data);
+
+            if (result) {
+                showSuccess("Event created successfully");
+                setFormData({
+                    booking: "",
+                    eventType: "Wedding",
+                    eventDate: "",
+                    startTime: "",
+                    endTime: "",
+                    venue: "",
+                    notes: "",
+                });
+                reset();
+                if (onSuccess) onSuccess();
+            } else {
+                showError("Failed to create event");
+            }
+        } catch (error) {
+         showError("Something went wrong");
         }
     };
 

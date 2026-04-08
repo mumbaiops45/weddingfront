@@ -3,10 +3,12 @@
 import React, { useState } from "react";
 import { Dialog, DialogBackdrop } from '@headlessui/react'
 import { useCreateLead } from "../../../hooks/lead.hook";
+import useToast from "../../../hooks/useToast";
 
 const Createlead = () => {
   const { addLead, loading, error, success } = useCreateLead();
   const [open, setOpen] = useState(false)
+  const { showSuccess, showError } = useToast();
 
   const [formData, setFormData] = useState({
     clientName: "",
@@ -36,6 +38,51 @@ const Createlead = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!formData.clientName) {
+      showError("Client name is required");
+      return;
+    }
+
+    if (!formData.phone) {
+      showError("Phone number is required");
+      return;
+    }
+
+    if (!/^[0-9]{10}$/.test(formData.phone)) {
+      showError("Enter valid 10-digit phone number");
+      return;
+    }
+
+    if (!formData.email) {
+      showError("Email is required");
+      return;
+    }
+
+    if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      showError("Enter valid email address");
+      return;
+    }
+
+    if (!formData.weddingDate) {
+      showError("Please select wedding date");
+      return;
+    }
+
+    if (!formData.location) {
+      showError("Location is required");
+      return;
+    }
+
+    if (formData.budget && Number(formData.budget) <= 0) {
+      showError("Budget must be greater than 0");
+      return;
+    }
+
+    if (formData.guestCount && Number(formData.guestCount) <= 0) {
+      showError("Guest count must be greater than 0");
+      return;
+    }
+
     const leadData = {
       ...formData,
       guestCount: Number(formData.guestCount),
@@ -47,49 +94,53 @@ const Createlead = () => {
       }),
     };
 
-    const result = await addLead(leadData);
+    try {
+      const result = await addLead(leadData);
 
-    if (result) {
-      alert("Lead created successfully!");
-      setFormData({
-        clientName: "",
-        phone: "",
-        email: "",
-        weddingDate: "",
-        location: "",
-        budget: "",
-        guestCount: "",
-        source: "Other",
-        status: "New",
-      });
-      setFollowUp({ note: "", followUpDate: "" });
-      setOpen(false);
+      if (result) {
+        showSuccess("Lead created successfully!");
+        setFormData({
+          clientName: "",
+          phone: "",
+          email: "",
+          weddingDate: "",
+          location: "",
+          budget: "",
+          guestCount: "",
+          source: "Other",
+          status: "New",
+        });
+        setFollowUp({ note: "", followUpDate: "" });
+        setOpen(false);
+      } else {
+        showError("Failed to create lead");
+      }
+    } catch (error) {
+      showError("Something went wrong");
     }
   };
 
   return (
     <>
-      <div className="flex">
+      <div className="flex my-2">
         <button
           onClick={() => setOpen(true)}
-          className="ml-auto rounded-md bg-black px-2.5 py-1.5 text-sm font-semibold text-white inset-ring inset-ring-white/5 hover:bg-black/50"
+          className="ml-auto mr-[30px] rounded-md bg-black px-2.5 py-1.5 text-sm font-semibold text-white inset-ring inset-ring-white/5 hover:bg-black/50"
         >
           Create Lead
         </button>
+
         <Dialog open={open} onClose={setOpen} className="relative z-10">
           <DialogBackdrop
             transition
             className="fixed inset-0 bg-gray-900/50 backdrop-blur-sm transition-opacity data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in"
           />
-
           <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
             <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-              <div className="max-w-4xl mx-auto p-6">
+              <div className="max-w-3xl mx-auto p-6">
                 <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
                   <div className="flex justify-between items-center  px-6 py-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-gray-200">
-                    <h2 className="text-xl font-semibold text-gray-800">Create New Lead</h2>
-
-
+                    <h2 className="text-[12px] font-semibold text-gray-800">Create New Lead</h2>
                     <button
                       className="font-bold text-lg cursor-pointer w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200  transition"
                       onClick={() => setOpen(false)}
@@ -318,6 +369,7 @@ const Createlead = () => {
             </div>
           </div>
         </Dialog>
+
       </div>
 
     </>

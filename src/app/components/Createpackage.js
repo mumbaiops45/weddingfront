@@ -2,10 +2,11 @@
 
 import React, { useState, useEffect } from "react";
 import { usePackageActions } from '../../../hooks/package.hook';
+import useToast from "../../../hooks/useToast";
 
 export default function Createpackage() {
- const { createNewPackage, loading, error, success } = usePackageActions();
-
+  const { createNewPackage, loading, error, success } = usePackageActions();
+  const { showSuccess, showError } = useToast();
   const [packageData, setPackageData] = useState({
     name: "",
     basePrice: 0,
@@ -53,16 +54,48 @@ export default function Createpackage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!packageData.name) {
+      showError("Package name is required");
+      return;
+    }
+
+    if (!packageData.basePrice || packageData.basePrice <= 0) {
+      showError("Base price must be greater than 0");
+      return;
+    }
+
+    if (!packageData.description) {
+      showError("Description is required");
+      return;
+    }
+
+    const validServices = packageData.services.filter(
+      (s) => s.serviceName && s.price > 0
+    );
+
+    if (packageData.services.length > 0 && validServices.length === 0) {
+      showError("Please fill service details correctly");
+      return;
+    }
+
     try {
-      await createNewPackage(packageData); 
-      setPackageData({
-        name: "",
-        basePrice: 0,
-        description: "",
-        popularityScore: 0,
-        services: [],
-      });
-      setShowModal(false); 
+      const res = await createNewPackage(packageData);
+
+      if (res) {
+        showSuccess("Package created successfully");
+
+        setPackageData({
+          name: "",
+          basePrice: 0,
+          description: "",
+          popularityScore: 0,
+          services: [],
+        });
+        setShowModal(false);
+      } else {
+        showError("Failed to create package");
+      }
     } catch (err) {
       console.error("Failed to create package", err);
     }
@@ -80,17 +113,19 @@ export default function Createpackage() {
   };
 
 
-    const handleCloseModal = () => {
+  const handleCloseModal = () => {
     setShowModal(false);
     resetForm();
   };
+
+
   return (
 
-     <>
+    <>
       <div className="p-2 flex justify-end">
         <button
           onClick={() => setShowModal(true)}
-          className="px-6 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition duration-200 shadow-md hover:shadow-lg flex items-center gap-2"
+          className="px-6 py-2 bg-black text-white rounded-lg font-semibold  transition duration-200 shadow-md hover:shadow-lg flex items-center gap-2"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
@@ -99,11 +134,11 @@ export default function Createpackage() {
         </button>
       </div>
 
-      
+
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto relative">
-           
+
             <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center">
               <h2 className="text-[18px] font-bold text-gray-800">Create New Package</h2>
               <button
@@ -118,9 +153,8 @@ export default function Createpackage() {
             <div className="p-6">
               {message && (
                 <div
-                  className={`mb-4 p-3 rounded-lg ${
-                    success ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
-                  }`}
+                  className={`mb-4 p-3 rounded-lg ${success ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+                    }`}
                 >
                   {message}
                 </div>
@@ -182,7 +216,7 @@ export default function Createpackage() {
                         onChange={handleChange}
                         placeholder="Enter popularity score "
                         min="0"
-                        
+
                         className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
                       />
                     </div>
@@ -202,7 +236,7 @@ export default function Createpackage() {
                       Add Service
                     </button>
                   </div>
-                  
+
                   {packageData.services.length === 0 ? (
                     <div className="text-center py-8 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
                       <p className="text-gray-500">No services added yet. Click "Add Service" to get started.</p>
@@ -279,11 +313,10 @@ export default function Createpackage() {
                   </button>
                   <button
                     type="submit"
-                    className={`px-6 py-2 rounded-lg font-semibold transition ${
-                      loading 
-                        ? "bg-gray-400 cursor-not-allowed" 
+                    className={`px-6 py-2 rounded-lg font-semibold transition ${loading
+                        ? "bg-gray-400 cursor-not-allowed"
                         : "bg-green-600 text-white hover:bg-green-700"
-                    }`}
+                      }`}
                     disabled={loading}
                   >
                     {loading ? (

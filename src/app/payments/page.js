@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { usePayments, usePaymentActions } from "../../../hooks/payment.hook";
 import Createpayment from "../components/Createpayment";
 import Editpayment from "../components/Editpayment";
+import useToast from "../../../hooks/useToast";
 
 const Page = () => {
   const { payments, loading, error } = usePayments();
@@ -12,12 +13,29 @@ const Page = () => {
   const [showCreate, setShowCreate] = useState(false);
   const [editingPayment, setEditingPayment] = useState(null);
   const [actionLoading, setActionLoading] = useState(null);
+  const { showSuccess, showError, showWarning } = useToast();
 
   const handleDelete = async (id) => {
-    if (!confirm("Are you sure you want to delete this payment?")) return;
+    if (!confirm("Are you sure you want to delete this payment?")) {
+      showWarning("Delete cancelled");
+      return;
+    }
     setActionLoading(id);
-    await deletePayment(id);
-    setActionLoading(null);
+
+
+    try {
+      const res = await deletePayment(id);
+      if (res) {
+        showSuccess("Payment deleted successfully");
+      } else {
+        showError("Failed to delete payment");
+      }
+    } catch (error) {
+      showError("Something went wrong while deleting");
+    } finally {
+      setActionLoading(null);
+    }
+
   };
 
   const getStatusColor = (status) => {
@@ -70,7 +88,7 @@ const Page = () => {
         </div>
         <button
           onClick={() => { setShowCreate(!showCreate); setEditingPayment(null); }}
-          className="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition"
+          className="w-full sm:w-auto px-4 py-2 bg-black text-white rounded-lg text-sm font-medium  transition"
         >
           {showCreate ? "Cancel" : "+ Add Payment"}
         </button>
@@ -203,7 +221,7 @@ const Page = () => {
                     {formatDate(payment.booking?.eventDate)}
                   </p>
                 </div>
-                
+
                 <div>
                   <p className="text-xs text-gray-400 mb-0.5">Booking Status</p>
                   <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${payment.booking?.status === "Confirmed"
@@ -254,7 +272,7 @@ const Page = () => {
                     setShowCreate(false);
                     window.scrollTo({ top: 0, behavior: "smooth" });
                   }}
-                  className="px-4 py-1.5 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-700 transition"
+                  className="px-4 py-1.5 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700 transition"
                 >
                   Edit
                 </button>
@@ -274,7 +292,7 @@ const Page = () => {
         </div>
       )}
     </div>
-    
+
   );
 };
 

@@ -4,20 +4,36 @@ import React, { useState } from "react";
 import { useEvents, useEventActions } from "../../../hooks/event.hook";
 import CreateEvent from "../components/CreateEvent";
 import EditEvent from "../components/EditEvent";
+import useToast from "../../../hooks/useToast";
 
 const EventList = () => {
   const { events, pagination, loading, error, } = useEvents();
   const { deleteEvent } = useEventActions();
-
-  const [showCreate, setShowCreate]   = useState(false);
+  const{showSuccess , showError}  = useToast();
+  const [showCreate, setShowCreate] = useState(false);
   const [editingEvent, setEditingEvent] = useState(null);
   const [actionLoading, setActionLoading] = useState(null);
 
   const handleDelete = async (id) => {
-    if (!confirm("Are you sure you want to delete this event?")) return;
+     if (!confirm("Are you sure you want to delete this event?")) {
+    showError("Delete cancelled"); 
+    return;
+  }
     setActionLoading(id);
-    await deleteEvent(id);
-    setActionLoading(null);
+    try {
+      const res = await deleteEvent(id);
+
+      if(res) {
+        showSuccess("Event deleted Successfully");
+      } else {
+        showSuccess("Event deleted Successfully");
+      }
+    } catch (error) {
+      showError("Something went wrong while deleting");
+    } finally {
+      setActionLoading(null);
+    }
+    
   };
 
   if (loading) return (
@@ -27,18 +43,18 @@ const EventList = () => {
   return (
     <div className="max-w-7xl mx-auto p-6">
 
-      
+
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-gray-800">All Events</h2>
         <button
           onClick={() => { setShowCreate(!showCreate); setEditingEvent(null); }}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700"
+          className="px-4 py-2 bg-black text-white rounded-lg text-sm font-medium"
         >
           {showCreate ? "Cancel" : "+ Create Event"}
         </button>
       </div>
 
-     
+
       {showCreate && (
         <div className="mb-6">
           <CreateEvent
@@ -49,7 +65,7 @@ const EventList = () => {
         </div>
       )}
 
-      
+
       {editingEvent && (
         <div className="mb-6">
           <EditEvent
@@ -60,14 +76,14 @@ const EventList = () => {
         </div>
       )}
 
-      
+
       {error && (
         <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
           {error}
         </div>
       )}
 
-      
+
       {!events || events.length === 0 ? (
         <div className="text-center text-gray-500 py-10 bg-white rounded-xl border border-gray-200">
           No events found
@@ -77,9 +93,9 @@ const EventList = () => {
           {events.map((event) => (
             <div
               key={event._id}
-              className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition"
+              className="bg-gray-100 rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition"
             >
-              
+
               <div className="flex justify-between items-start mb-4">
                 <div>
                   <h3 className="text-lg font-semibold text-gray-800">
@@ -94,7 +110,7 @@ const EventList = () => {
                 </span>
               </div>
 
-              
+
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4 text-sm">
                 <div>
                   <p className="text-gray-400 text-xs mb-0.5">Event Date</p>
@@ -116,19 +132,18 @@ const EventList = () => {
                 </div>
                 <div>
                   <p className="text-gray-400 text-xs mb-0.5">Booking Status</p>
-                  <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
-                    event.booking?.status === "Confirmed"
+                  <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${event.booking?.status === "Confirmed"
                       ? "bg-green-100 text-green-700"
                       : event.booking?.status === "Cancelled"
-                      ? "bg-red-100 text-red-700"
-                      : "bg-yellow-100 text-yellow-700"
-                  }`}>
+                        ? "bg-red-100 text-red-700"
+                        : "bg-yellow-100 text-yellow-700"
+                    }`}>
                     {event.booking?.status || "N/A"}
                   </span>
                 </div>
               </div>
 
-             
+
               {event.notes?.length > 0 && (
                 <div className="mb-4">
                   <p className="text-xs text-gray-400 mb-1">Notes</p>
@@ -145,7 +160,7 @@ const EventList = () => {
                 </div>
               )}
 
-           
+
               <div className="flex gap-2 pt-4 border-t border-gray-100">
                 <button
                   onClick={() => {
@@ -153,7 +168,7 @@ const EventList = () => {
                     setShowCreate(false);
                     window.scrollTo({ top: 0, behavior: "smooth" });
                   }}
-                  className="px-4 py-1.5 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-700"
+                  className="px-4 py-1.5 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700"
                 >
                   Edit
                 </button>
@@ -170,7 +185,7 @@ const EventList = () => {
         </div>
       )}
 
-     
+
       {pagination && (
         <div className="mt-6 flex justify-between items-center text-sm text-gray-500">
           <p>Total: {pagination.total} events</p>

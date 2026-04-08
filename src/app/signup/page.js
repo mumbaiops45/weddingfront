@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { useUser } from "../../../hooks/user.hook";
+import useToast from "../../../hooks/useToast";
 
 
 const Page = () => {
@@ -9,10 +10,12 @@ const Page = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { showSuccess, showError } = useState();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     await register({ name, email, password });
+    showSuccess("Signup Successfull");
   };
 
   return (

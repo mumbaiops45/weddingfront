@@ -3,11 +3,13 @@
 import React, { useState } from 'react';
 import { useCreatePayment } from "../../../hooks/payment.hook";
 import { useBookings } from '../../../hooks/booking.hooks';
+import useToast from '../../../hooks/useToast';
 
 const Createpayment = () => {
 
   const { createPayment, loading, error, success, reset } = useCreatePayment();
   const { bookings, loading: bookingsLoading, error: bookingsError } = useBookings();
+  const { showSuccess, showError } = useToast();
 
   const [formData, setFormData] = useState({
     booking: "",
@@ -26,6 +28,23 @@ const Createpayment = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!formData.booking) {
+      showError("Please select a booking");
+      return;
+    }
+
+    if (!formData.amount || Number(formData.amount) <= 0) {
+      showError("Please enter valid amount");
+      return;
+    }
+
+    if (!formData.paymentDate) {
+      showError("Please select payment date");
+      return;
+    }
+
+
+
     const data = {
       booking: formData.booking,
       amount: Number(formData.amount),
@@ -35,19 +54,26 @@ const Createpayment = () => {
       notes: formData.notes || undefined,
     };
 
-    const result = await createPayment(data);
 
-    if (result) {
-      alert("Payment created successfully!");
-      setFormData({
-        booking: "",
-        amount: "",
-        paymentMethod: "Cash",
-        paymentDate: "",
-        transactionId: "",
-        notes: "",
-      });
-      reset();
+    try {
+      const result = await createPayment(data);
+
+      if (result) {
+        showSuccess("Payment created successfully!");
+        setFormData({
+          booking: "",
+          amount: "",
+          paymentMethod: "Cash",
+          paymentDate: "",
+          transactionId: "",
+          notes: "",
+        });
+        reset();
+      } else {
+        showError("Failed to create payment");
+      }
+    } catch (error) {
+      showError("Something went wrong");
     }
   };
 
@@ -99,7 +125,7 @@ const Createpayment = () => {
 
                 {(bookings || []).map((b) => (
                   <option key={b._id} value={b._id}>
-                    {b.lead?.clientName} 
+                    {b.lead?.clientName}
                   </option>
                 ))}
               </select>
@@ -158,7 +184,7 @@ const Createpayment = () => {
               />
             </div>
 
-            
+
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Transaction ID
@@ -174,7 +200,7 @@ const Createpayment = () => {
               />
             </div>
 
-          
+
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Notes
@@ -190,7 +216,7 @@ const Createpayment = () => {
               />
             </div>
 
-        
+
             <div className="flex gap-3 pt-2">
               <button
                 type="submit"

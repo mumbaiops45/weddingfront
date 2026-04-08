@@ -24,10 +24,10 @@ export default function Navbar() {
 
   return (  
     <>
-      <div className="absolute fixed left-0 top-0 h-full w-64 bg-white shadow-lg">
+      <div className="absolute fixed  left-0 top-0 h-full w-64 bg-gray-200 shadow-lg">
         <div className="flex flex-col h-full">
           <div className="p-4 border-b border-gray-700">
-            <h1 className="text-black text-xl font-bold">Wedding Planner</h1>
+            <h1 className="text-black text-[15px] font-bold">Wedding Planner</h1>
           </div>
           <nav className="flex-1 p-4">
             <ul className="space-y-2">
@@ -39,12 +39,12 @@ export default function Navbar() {
                       href={item.href}
                       className={classNames(
                         isActive
-                          ? 'bg-gray-200 text-black '
+                          ? 'bg-gray-400 text-black '
                           : 'text-black  hover:bg-gray-100',
-                        'flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors'
+                        'flex items-center gap-3 rounded-md px-3 py-2 text-[14px] font-medium transition-colors'
                       )}
                     >
-                      <span className="text-xl">{item.icon}</span>
+                      <span className="text-[12px]">{item.icon}</span>
                       {item.name}
                     </Link>
                   </li>
@@ -58,14 +58,14 @@ export default function Navbar() {
               <div className="space-y-2">
                 <Link
                   href="login"
-                  className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium  text-black  hover:bg-gray-100 transition-colors"
+                  className="flex items-center gap-3 rounded-md px-3 py-2 text-[14px] font-medium  text-black  hover:bg-gray-100 transition-colors"
                 >
                   <span>🔐</span>
                   Login
                 </Link>
                 <Link
                   href="signup"
-                  className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium  text-black  hover:bg-gray-100 transition-colors"
+                  className="flex items-center gap-3 rounded-md px-3 py-2 text-[14px] font-medium  text-black  hover:bg-gray-100 transition-colors"
                 >
                   <span>📝</span>
                   Signup
@@ -73,21 +73,10 @@ export default function Navbar() {
               </div>
             ) : (
               <div>
-                <div className="flex items-center gap-3 px-3 py-2 mb-2">
-                  <img
-                    alt=""
-                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                    className="h-10 w-10 rounded-full bg-gray-800 outline outline-1 outline-white/10"
-                  />
-                  <div className="flex-1">
-                    <p className="text-white text-sm font-medium">{user.name}</p>
-                    <p className="text-gray-400 text-xs">{user.email}</p>
-                  </div>
-                </div>
                 <button
                   onClick={logout}
                   disabled={loading}
-                  className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-red-400 hover:bg-white/5 hover:text-red-300 transition-colors w-full"
+                  className="flex items-center gap-3 rounded-md px-3 py-2 text-[12px] font-medium text-red-400 hover:bg-white/5 hover:text-red-300 transition-colors w-full"
                 >
                   <span>🚪</span>
                   {loading ? "Logging out..." : "Logout"}

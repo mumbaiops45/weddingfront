@@ -5,6 +5,7 @@ import { useCreateBooking } from "../../../hooks/booking.hooks";
 import { useLeads } from "../../../hooks/lead.hook";
 import { usePackages } from "../../../hooks/package.hook";
 import { useVendor } from "../../../hooks/vendor.hooks";
+import useToast from "../../../hooks/useToast";
 
 
 const CreateBooking = () => {
@@ -12,6 +13,7 @@ const CreateBooking = () => {
   const { leads, loading: leadsLoading } = useLeads();
   const { packages, loading: packagesLoading } = usePackages();
   const { vendors, loading: vendorsLoading, fetchVendors } = useVendor();
+  const { showSuccess, showError } = useToast();
   const [formData, setFormData] = useState({
     lead: "",
     package: "",
@@ -50,9 +52,34 @@ const CreateBooking = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!formData.lead) {
+      showError("Please select a lead");
+      return;
+    }
+
+    if (!formData.package) {
+      showError("Please select a package");
+      return;
+    }
+
+    if (!formData.eventDate) {
+      showError("Please select event date");
+      return;
+    }
+
+    if (!formData.totalPrice || Number(formData.totalPrice) <= 0) {
+      showError("Please enter valid total price");
+      return;
+    }
+
     const validVendors = formData.vendors.filter(
       (v) => v.vendor && v.assignedRole
     );
+
+    if (formData.vendors.length > 0 && validVendors.length === 0) {
+      showError("Please fill vendor details correctly");
+      return;
+    }
 
     const data = {
       lead: formData.lead,
@@ -64,23 +91,27 @@ const CreateBooking = () => {
       vendors: validVendors,
     };
 
-    console.log("Sending Data:", data);
+    try {
+      const result = await createBooking(data);
 
-    const result = await createBooking(data);
-
-    if (result) {
-      alert("Booking created successfully!");
-      setFormData({
-        lead: "",
-        package: "",
-        vendors: "",
-        eventDate: "",
-        totalPrice: "",
-        paymentStatus: "Pending",
-        notes: "",
-      });
-      setShowForm(false);
-      reset();
+      if (result) {
+        showSuccess("Booking created successfully");
+        setFormData({
+          lead: "",
+          package: "",
+          vendors: "",
+          eventDate: "",
+          totalPrice: "",
+          paymentStatus: "Pending",
+          notes: "",
+        });
+        setShowForm(false);
+        reset();
+      } else {
+        showError("Failed to create booking");
+      }
+    } catch (err) {
+      showError("Something went worng");
     }
   };
 
@@ -89,11 +120,11 @@ const CreateBooking = () => {
   }, [fetchVendors]);
 
   return (
-    <div className="p-2  ">
-      <div className="flex justify-end">
+    <div className="p-2 ">
+      <div className="flex  justify-end">
         <button
           onClick={() => setShowForm(!showForm)}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700"
+          className="px-4 py-2 bg-black text-white rounded-lg text-sm font-medium hover:bg-blue-700"
         >
           Create Booking
         </button>

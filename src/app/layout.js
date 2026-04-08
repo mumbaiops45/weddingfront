@@ -1,6 +1,7 @@
 import "./globals.css";
 import Navbar from "./components/Navbar";
 import Createlead from "./components/Createlead";
+import Toast from "./components/common/Toast";
 
 export default function RootLayout({ children }) {
   return (
@@ -10,6 +11,7 @@ export default function RootLayout({ children }) {
         <div className="pl-64">
           {/* <Createlead/> */}
           {children}
+          <Toast />
         </div>
 
       </body>

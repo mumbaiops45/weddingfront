@@ -13,6 +13,7 @@ import {
   canDelete,
 } from "../../../utils/booking.utils";
 import CreateBooking from "../components/CreateBooking";
+import useToast from "../../../hooks/useToast";
 
 const Page = () => {
   const { bookings, pagination, loading, error } = useBookings();
@@ -25,7 +26,7 @@ const Page = () => {
     updatePaymentStatus,
     updateBooking,
   } = useBookingActions();
-
+  const { showSuccess, showError, showWarning } = useToast();
   const [rejectModal, setRejectModal] = useState(false);
   const [updateModal, setUpdateModal] = useState(false);
   const [rejectReason, setRejectReason] = useState("");
@@ -42,36 +43,98 @@ const Page = () => {
 
   const handleConfirm = async (id) => {
     setActionLoading(id + "confirm");
-    await confirmBooking(id);
-    setActionLoading(null);
+
+    try {
+      const res = await confirmBooking(id);
+
+      if (res) {
+        showSuccess("Booking confirmed");
+      } else {
+        showError("Failed to confirm booking");
+      }
+    } catch (error) {
+      showError("Something went wrong");
+    } finally {
+      setActionLoading(null);
+    }
+
+
   };
 
   const handleReject = async () => {
     setActionLoading(selectedId + "reject");
-    await rejectBooking(selectedId, rejectReason);
-    setRejectModal(false);
-    setRejectReason("");
-    setSelectedId(null);
-    setActionLoading(null);
+    try {
+      const res = await rejectBooking(selectedId, rejectReason);
+
+      if (res) {
+        showSuccess("Booking rejected");
+      } else {
+        showError("Failed to reject booking");
+      }
+    } catch (error) {
+      showError("Something went wrong");
+    } finally {
+      setRejectModal(false);
+      setRejectReason("");
+      setSelectedId(null);
+      setActionLoading(null);
+    }
   };
 
   const handleComplete = async (id) => {
     setActionLoading(id + "complete");
-    await completeBooking(id);
-    setActionLoading(null);
+
+    try {
+      const res = await completeBooking(id);
+
+      if (res) {
+        showSuccess("Booking completed");
+      } else {
+        showError("Failed to complete booking");
+      }
+    } catch (error) {
+      showError("Something went wrong");
+    } finally {
+      setActionLoading(null);
+    }
   };
 
   const handleDelete = async (id) => {
     if (!confirm("Are you sure you want to delete this booking?")) return;
     setActionLoading(id + "delete");
-    await deleteBooking(id);
-    setActionLoading(null);
+
+    try {
+      const res = await deleteBooking(id);
+
+      if (res) {
+        showSuccess("Booking deleted");
+      } else {
+        showError("Failed to delete booking");
+      }
+    } catch (error) {
+      showError("Somethings went wrong");
+    } finally {
+      setActionLoading(null);
+    }
+
   };
 
   const handlePayment = async (id, status) => {
     setActionLoading(id + "payment");
-    await updatePaymentStatus(id, status);
-    setActionLoading(null);
+
+    try {
+      const res = await updatePaymentStatus(id, status);
+
+      if (res) {
+        showSuccess("Payment status updated");
+      } else {
+        showError("Failed to update payment");
+      }
+    } catch (error) {
+      showError("Something went wrong");
+    } finally {
+      setActionLoading(null);
+    }
   };
 
 
@@ -95,10 +158,22 @@ const Page = () => {
       eventDate: updateForm.eventDate,
       ...(updateForm.notes && { notes: [updateForm.notes] }),
     };
-    await updateBooking(selectedId, data);
-    setUpdateModal(false);
-    setSelectedId(null);
-    setActionLoading(null);
+
+    try {
+      const res = await updateBooking(selectedId, data);
+
+      if (res) {
+        showSuccess("Booking updated");
+      } else {
+        showError("Failed to update booking");
+      }
+    } catch (error) {
+      showError("Somethings went wrong");
+    } finally {
+      setUpdateModal(false);
+      setSelectedId(null);
+      setActionLoading(null);
+    }
   };
 
   if (loading) return <div className="p-6 text-center">Loading bookings...</div>;
@@ -106,10 +181,10 @@ const Page = () => {
 
   return (
     <div className="max-w-7xl  mx-auto p-6">
-      <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
-        <h2 className="text-2xl font-bold text-gray-800 flex-shrink-0">All Bookings</h2>
-        <div className="flex justify-between items-center mb-6">
-          <div className="flex gap-2">
+      <div className="flex flex-wrap  border rounded-xl items-center justify-between gap-4 mb-6">
+        <h2 className="text-2xl mx-3 font-bold text-gray-800 flex-shrink-0">All Bookings</h2>
+        <div className="flex justify-between items-center ">
+          <div className="flex  gap-2">
             <select
               value={sortBy}
               onChange={(e) => changeOrder(order, e.target.value)}
@@ -134,15 +209,14 @@ const Page = () => {
       </div>
 
       {bookings.length === 0 ? (
-        <div className="text-center text-gray-500 py-10">No bookings found</div>
+        <div className="text-center  text-gray-500 py-10">No bookings found</div>
       ) : (
         <div className="space-y-4">
           {bookings.map((booking) => (
             <div
               key={booking._id}
-              className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm"
+              className="bg-gray-100 rounded-xl border border-gray-200 p-6 shadow-sm"
             >
-
               <div className="flex justify-between items-start mb-4">
                 <div>
                   <h3 className="text-lg font-semibold text-gray-800">
@@ -209,7 +283,7 @@ const Page = () => {
                 {booking.status !== "Cancelled" && booking.status !== "Completed" && (
                   <button
                     onClick={() => openUpdateModal(booking)}
-                    className="px-3 py-1.5 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-700"
+                    className="px-3 py-1.5 bg-gray-600 text-white text-sm rounded-lg hover:bg-gray-700"
                   >
                     Update
                   </button>
@@ -219,7 +293,7 @@ const Page = () => {
                   <button
                     onClick={() => handleConfirm(booking._id)}
                     disabled={actionLoading === booking._id + "confirm"}
-                    className="px-3 py-1.5 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                    className="px-3 py-1.5 bg-green-700 text-white text-sm rounded-lg hover:bg-green-600 disabled:opacity-50"
                   >
                     {actionLoading === booking._id + "confirm" ? "..." : "Confirm"}
                   </button>
@@ -261,7 +335,7 @@ const Page = () => {
                   <button
                     onClick={() => handleDelete(booking._id)}
                     disabled={actionLoading === booking._id + "delete"}
-                    className="px-3 py-1.5 bg-gray-100 text-gray-700 text-sm rounded-lg hover:bg-gray-200 disabled:opacity-50"
+                    className="px-3 py-1.5 bg-[#ff8700] text-white text-sm rounded-lg hover:bg-red-300 disabled:opacity-50"
                   >
                     {actionLoading === booking._id + "delete" ? "..." : "Delete"}
                   </button>

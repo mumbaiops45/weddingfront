@@ -1,10 +1,12 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import { useVendor } from '../../../hooks/vendor.hooks';
+import useToast from '../../../hooks/useToast';
 
 const EditVendor = ({ vendor, onClose }) => {
     const { updateVendor } = useVendor();
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const {showSuccess , showError} = useToast();
 
     const [formData, setFormData] = useState({
         name: "",
@@ -40,10 +42,11 @@ const EditVendor = ({ vendor, onClose }) => {
         setIsSubmitting(true);
         try {
             await updateVendor(vendor._id, formData);
+            showSuccess("Vendor updated successfully!");
             onClose();
         } catch (error) {
             console.error("Error updating vendor:", error);
-            alert("Failed to update vendor");
+            showError(error?.message || "Failed to update vendor");
         } finally {
             setIsSubmitting(false);
         }
@@ -51,7 +54,6 @@ const EditVendor = ({ vendor, onClose }) => {
 
     return (
         <>
-
             <div
                 className="fixed inset-0 z-40 bg-black/40 backdrop-blur-md"
                 onClick={onClose}

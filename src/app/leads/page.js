@@ -6,10 +6,7 @@ import Createlead from '../components/Createlead'
 
 const page = () => {
 
-    const { leads, loading, error } = useLeads();
-
-    // const { searchResults, query, updateQuery } = useSearchLeads();
-    
+    const { leads, loading, error } = useLeads();    
 
     if (loading) return <p>Loading leads...</p>;
     if (error) return <p>{error}</p>;
@@ -17,9 +14,9 @@ const page = () => {
         <div>
             <Createlead />
             
-            <div className="overflow-x-auto rounded-lg border border-gray-200 shodow-sm">
-                <table className="min-w-full text-[13px] text-gray-700">
-                    <thead className="bg-blue-200 text-[10px] font-bold uppercase tracking-wider text-gray-600">
+            <div className="overflow-x-auto mx-[30px] rounded-lg border border-gray-200 shodow-sm">
+                <table className="min-w-full text-[13px] text-gray-700 ">
+                    <thead className="bg-black text-[11px] font-bold uppercase tracking-wider text-white">
                         <tr>
                             <th className="border px-4 py-2 text-center">Name / Phone</th>
                             <th className=" border px-4 py-2 text-center">Email</th>
@@ -32,12 +29,12 @@ const page = () => {
                     </thead>
                     <tbody  >
                         {leads.map((lead) => (
-                            <tr key={lead._id} className="hover:bg-gray-50">
+                            <tr key={lead._id} className=" hover:bg-gray-50">
 
-                                <td className="border px-4 py-1">
+                                <td className="border  px-4 py-1">
                                     <div className="flex flex-col">
-                                        <span className="font-medium">{lead.clientName}</span>
-                                        <span className="text-sm text-gray-500">{lead.phone}</span>
+                                        <span className="text-[13px] font-medium">{lead.clientName}</span>
+                                        <span className="text-[13px] text-gray-500">{lead.phone}</span>
                                     </div>
                                 </td>
                                 <td className="border px-4 py-1">{lead.email}</td>

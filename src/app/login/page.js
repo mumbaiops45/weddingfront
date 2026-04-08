@@ -3,25 +3,27 @@
 import React, { useState } from "react";
 import { useUser } from "../../../hooks/user.hook";
 import { useRouter } from "next/navigation";
+import { useToast } from "../../../hooks/useToast";
 
 const Page = () => {
   const { login, loading, error, token } = useUser();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
+  const { showSuccess, showError, showPromise } = useToast();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const res = await login({ email, password });
 
     if (res) {
+      showSuccess("login Successfull")
       router.push("/leads");
+    } else {
+      showError(error || "Invalid email or password");
     }
 
-    if (!error) {
-      alert("Login successful!");
-      console.log("Token:", token);
-    }
+
   };
 
   return (
